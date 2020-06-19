@@ -1,35 +1,43 @@
 package com.octowallet.osworks.domain.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Cliente {
 
-    private int id;
-    private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private String nome;
     private String email;
     private String telefone;
 
     public Cliente() {
     }
 
-    public Cliente(String name, String email, String telefone) {
-        this.name = name;
+    public Cliente(String nome, String email, String telefone) {
+        this.nome = nome;
         this.email = email;
         this.telefone = telefone;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNome() {
+        return nome;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getEmail() {
@@ -48,12 +56,14 @@ public class Cliente {
         this.telefone = telefone;
     }
 
+    
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + id;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
+        result = prime * result + (int) (id ^ (id >>> 32));
         return result;
     }
 
@@ -66,12 +76,12 @@ public class Cliente {
         if (getClass() != obj.getClass())
             return false;
         Cliente other = (Cliente) obj;
-        if (id != other.id)
-            return false;
-        if (name == null) {
-            if (other.name != null)
+        if (email == null) {
+            if (other.email != null)
                 return false;
-        } else if (!name.equals(other.name))
+        } else if (!email.equals(other.email))
+            return false;
+        if (id != other.id)
             return false;
         return true;
     }
