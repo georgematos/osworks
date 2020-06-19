@@ -27,7 +27,11 @@ public class ClienteService {
     }
 
     public Cliente getClientePorId(Long id) {
-        return repository.findById(id).get();
+        return repository.findById(id).orElse(null);
+    }
+
+    public Cliente salvarCliente(Cliente cliente) {
+        return repository.save(cliente);
     }
 
 }
