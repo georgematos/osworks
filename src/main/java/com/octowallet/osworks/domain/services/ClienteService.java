@@ -19,9 +19,11 @@ public class ClienteService {
     }
 
     public List<Cliente> getClientes() {
-
         return repository.findAll();
+    }
 
+    public List<Cliente> getClientesPorNome(String nome) {
+        return repository.findByNome(nome);
     }
 
 }
