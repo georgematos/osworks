@@ -24,10 +24,13 @@ public class ClienteController {
         return clienteService.getClientes();
     }
 
-    @GetMapping("/{nome}")
+    @GetMapping("/nome/{nome}")
     public List<Cliente> listarPorNome(@PathVariable String nome) {
         return clienteService.getClientesPorNome(nome);
     }
 
-    
+    @GetMapping("/{id}")
+    public Cliente oberPorId(@PathVariable Long id) {
+        return clienteService.getClientePorId(id);
+    }
 }
