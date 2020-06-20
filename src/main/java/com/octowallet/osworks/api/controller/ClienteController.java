@@ -62,7 +62,7 @@ public class ClienteController {
             record.setNome(cliente.getNome());
             record.setEmail(cliente.getEmail());
             record.setTelefone(cliente.getTelefone());
-            Cliente updated = repository.save(record);
+            var updated = repository.save(record);
             return ResponseEntity.ok().body(updated);
         }).orElse(ResponseEntity.notFound().build());
     }
