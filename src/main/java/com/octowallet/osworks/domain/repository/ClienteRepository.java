@@ -1,6 +1,7 @@
 package com.octowallet.osworks.domain.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.octowallet.osworks.domain.model.Cliente;
 
@@ -10,6 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
-    List<Cliente> findByNome(String nome);
+    Optional<List<Cliente>> findByNome(String nome);
     
 }
