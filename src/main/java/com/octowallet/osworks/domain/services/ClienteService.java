@@ -1,5 +1,6 @@
 package com.octowallet.osworks.domain.services;
 
+import com.octowallet.osworks.api.exceptionhandler.customexceptions.DomainException;
 import com.octowallet.osworks.domain.model.Cliente;
 import com.octowallet.osworks.domain.repository.ClienteRepository;
 
@@ -17,6 +18,12 @@ public class ClienteService {
     }
 
     public Cliente salvar(Cliente cliente) {
+        var record = repository.findByEmail(cliente.getEmail());
+        
+        if (record.isPresent()) {
+            throw new DomainException("esse email já existe, tente outro.");
+        };
+
         return repository.save(cliente);
     }
 

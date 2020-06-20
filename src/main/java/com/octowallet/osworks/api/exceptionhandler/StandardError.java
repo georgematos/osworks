@@ -3,7 +3,7 @@ package com.octowallet.osworks.api.exceptionhandler;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Error {
+public class StandardError {
 
     private Integer status;
     private LocalDateTime dataHora;

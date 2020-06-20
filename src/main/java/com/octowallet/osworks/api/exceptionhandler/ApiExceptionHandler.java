@@ -3,6 +3,8 @@ package com.octowallet.osworks.api.exceptionhandler;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import com.octowallet.osworks.api.exceptionhandler.customexceptions.DomainException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -34,7 +37,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             fields.add(new LocalFieldError(nome, mensagem));
         });
 
-        var error = new Error();
+        var error = new StandardError();
         error.setStatus(status.value());
         error.setTitulo("Um ou mais campos são inválidos. Tente novamente.");
         error.setDataHora(LocalDateTime.now());
@@ -42,4 +45,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return super.handleExceptionInternal(ex, error, headers, status, request);
     }
+
+    @ExceptionHandler(DomainException.class)
+    public ResponseEntity<Object> handleDomainException(DomainException ex, WebRequest request) {
+
+        var status = HttpStatus.BAD_REQUEST;
+
+        var error = new StandardError();
+        error.setStatus(status.value());
+        error.setTitulo(ex.getMessage());
+        error.setDataHora(LocalDateTime.now());
+
+        // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
+    }
+
 }
