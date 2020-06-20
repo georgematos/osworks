@@ -1,7 +1,5 @@
 package com.octowallet.osworks.domain.services;
 
-import java.util.Optional;
-
 import com.octowallet.osworks.domain.model.Cliente;
 import com.octowallet.osworks.domain.repository.ClienteRepository;
 
