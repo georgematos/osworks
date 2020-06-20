@@ -16,7 +16,7 @@ public class Cliente {
     private Long id;
 
     @NotBlank
-    @Size(max = 60)
+    @Size(min = 8, max = 60)
     private String nome;
 
     @NotBlank
@@ -68,8 +68,6 @@ public class Cliente {
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
-
-    
 
     @Override
     public int hashCode() {

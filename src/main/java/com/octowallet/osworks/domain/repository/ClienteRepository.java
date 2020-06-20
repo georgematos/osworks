@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     Optional<List<Cliente>> findByNome(String nome);
-    
+
 }

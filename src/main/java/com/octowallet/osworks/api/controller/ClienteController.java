@@ -28,6 +28,9 @@ public class ClienteController {
     @Autowired
     private ClienteRepository repository;
 
+    @Autowired
+    private com.octowallet.osworks.domain.services.ClienteService service;
+
     @GetMapping
     public ResponseEntity<List<Cliente>> listar() {
         return ResponseEntity.ok().body(repository.findAll());
@@ -48,7 +51,7 @@ public class ClienteController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Cliente> salvarCliente(@Valid @RequestBody Cliente cliente) {
-        var clienteSalvo = repository.save(cliente);
+        var clienteSalvo = service.salvar(cliente);
 
         var uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").buildAndExpand(cliente.getId())
                 .toUri();
@@ -57,22 +60,25 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> atualizarCliente(@Valid @PathVariable Long id, @RequestBody Cliente cliente) {
-        return repository.findById(id).map(record -> {
-            record.setNome(cliente.getNome());
-            record.setEmail(cliente.getEmail());
-            record.setTelefone(cliente.getTelefone());
-            var updated = repository.save(record);
-            return ResponseEntity.ok().body(updated);
-        }).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Cliente> atualizarCliente(@PathVariable Long id, @Valid @RequestBody Cliente cliente) {
+
+        var entity = service.atualizar(id, cliente);
+
+        if (entity == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().body(entity);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deletarCliente(@PathVariable Long id) {
-        return repository.findById(id).map(record -> {
-            repository.deleteById(id);
+
+        if (service.deletar(id)) {
             return ResponseEntity.ok().build();
-        }).orElse(ResponseEntity.notFound().build());
-        
+        }
+
+        return ResponseEntity.notFound().build();
+
     }
 }
