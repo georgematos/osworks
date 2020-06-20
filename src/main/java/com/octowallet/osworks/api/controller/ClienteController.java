@@ -26,29 +26,29 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class ClienteController {
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private ClienteRepository repository;
 
     @GetMapping
     public ResponseEntity<List<Cliente>> listar() {
-        return ResponseEntity.ok().body(clienteRepository.findAll());
+        return ResponseEntity.ok().body(repository.findAll());
     }
 
     @GetMapping("/nome/{nome}")
     public ResponseEntity<List<Cliente>> listarPorNome(@PathVariable String nome) {
-        return clienteRepository.findByNome(nome).map(record -> ResponseEntity.ok().body(record))
+        return repository.findByNome(nome).map(record -> ResponseEntity.ok().body(record))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Cliente> oberPorId(@PathVariable Long id) {
-        return clienteRepository.findById(id).map(record -> ResponseEntity.ok().body(record))
+        return repository.findById(id).map(record -> ResponseEntity.ok().body(record))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Cliente> salvarCliente(@Valid @RequestBody Cliente cliente) {
-        var clienteSalvo = clienteRepository.save(cliente);
+        var clienteSalvo = repository.save(cliente);
 
         var uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").buildAndExpand(cliente.getId())
                 .toUri();
@@ -58,19 +58,19 @@ public class ClienteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Cliente> atualizarCliente(@Valid @PathVariable Long id, @RequestBody Cliente cliente) {
-        return clienteRepository.findById(id).map(record -> {
+        return repository.findById(id).map(record -> {
             record.setNome(cliente.getNome());
             record.setEmail(cliente.getEmail());
             record.setTelefone(cliente.getTelefone());
-            Cliente updated = clienteRepository.save(record);
+            Cliente updated = repository.save(record);
             return ResponseEntity.ok().body(updated);
         }).orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deletarCliente(@PathVariable Long id) {
-        return clienteRepository.findById(id).map(record -> {
-            clienteRepository.deleteById(id);
+        return repository.findById(id).map(record -> {
+            repository.deleteById(id);
             return ResponseEntity.ok().build();
         }).orElse(ResponseEntity.notFound().build());
         
