@@ -3,6 +3,7 @@ package com.octowallet.osworks.domain.services;
 import com.octowallet.osworks.api.exceptionhandler.customexceptions.DomainException;
 import com.octowallet.osworks.domain.model.Cliente;
 import com.octowallet.osworks.domain.repository.ClienteRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ public class ClienteService {
           record.setNome(cliente.getNome());
           record.setEmail(cliente.getEmail());
           record.setTelefone(cliente.getTelefone());
+
           return record;
         }
       )
@@ -38,12 +40,13 @@ public class ClienteService {
     if (entity == null) {
       return entity;
     }
-
-    if (
-      verificarSeExisteClienteComEsseEmail(cliente.getEmail()).getId() !=
-      entity.getId()
-    ) {
-      throw new DomainException("esse email já existe, tente outro.");
+    
+    var clienteDoEmail = verificarSeExisteClienteComEsseEmail(cliente.getEmail());
+    
+    if (clienteDoEmail != null) {
+      if (clienteDoEmail.getId() != entity.getId()) {
+        throw new DomainException("esse email já existe, tente outro.");
+      }
     }
 
     return repository.save(entity);
@@ -62,6 +65,10 @@ public class ClienteService {
 
   private Cliente verificarSeExisteClienteComEsseEmail(String email) {
     var cliente = repository.findByEmail(email);
-    return cliente.get();
+    if (cliente.isPresent()) {
+      return cliente.get();
+    }
+    return null;
   }
+
 }
