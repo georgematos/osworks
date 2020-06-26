@@ -1,74 +1,67 @@
 package com.octowallet.osworks.domain.services;
 
-import java.util.Optional;
-
 import com.octowallet.osworks.api.exceptionhandler.customexceptions.DomainException;
 import com.octowallet.osworks.domain.model.Cliente;
 import com.octowallet.osworks.domain.repository.ClienteRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ClienteService {
+  @Autowired
+  private ClienteRepository repository;
 
-    @Autowired
-    private ClienteRepository repository;
+  public ClienteService() {}
 
-    public ClienteService() {
+  public Cliente salvar(Cliente cliente) {
+    var record = repository.findByEmail(cliente.getEmail());
 
+    if (record.isPresent()) {
+      throw new DomainException("esse email já existe, tente outro.");
     }
 
-    public Cliente salvar(Cliente cliente) {
+    return repository.save(cliente);
+  }
 
-        var record = repository.findByEmail(cliente.getEmail());
-
-        if (record.isPresent()) {
-            throw new DomainException("esse email já existe, tente outro.");
+  public Cliente atualizar(Long id, Cliente cliente) {
+    var entity = repository
+      .findById(id)
+      .map(record -> {
+          record.setNome(cliente.getNome());
+          record.setEmail(cliente.getEmail());
+          record.setTelefone(cliente.getTelefone());
+          return record;
         }
+      )
+      .orElse(null);
 
-        return repository.save(cliente);
-
+    if (entity == null) {
+      return entity;
     }
 
-    public Cliente atualizar(Long id, Cliente cliente) {
-
-        var entity = repository.findById(id).map(record -> {
-
-            record.setNome(cliente.getNome());
-            record.setEmail(cliente.getEmail());
-            record.setTelefone(cliente.getTelefone());
-
-            return record;
-
-        }).orElse(null);
-
-        if (entity == null) {
-            return entity;
-        }
-
-        if (verificarSeExisteClienteComEsseEmail(cliente.getEmail()).getId() != entity.getId()) {
-            throw new DomainException("esse email já existe, tente outro.");
-        }
-
-        return repository.save(entity);
+    if (
+      verificarSeExisteClienteComEsseEmail(cliente.getEmail()).getId() !=
+      entity.getId()
+    ) {
+      throw new DomainException("esse email já existe, tente outro.");
     }
 
-    public Boolean deletar(Long id) {
-        var opt = repository.findById(id);
+    return repository.save(entity);
+  }
 
-        if (opt.isPresent()) {
-            repository.deleteById(id);
-            return true;
-        }
+  public Boolean deletar(Long id) {
+    var opt = repository.findById(id);
 
-        return false;
-
+    if (opt.isPresent()) {
+      repository.deleteById(id);
+      return true;
     }
 
-    private Cliente verificarSeExisteClienteComEsseEmail(String email) {
-        var cliente = repository.findByEmail(email);
-        return cliente.get();
-    }
+    return false;
+  }
 
+  private Cliente verificarSeExisteClienteComEsseEmail(String email) {
+    var cliente = repository.findByEmail(email);
+    return cliente.get();
+  }
 }
