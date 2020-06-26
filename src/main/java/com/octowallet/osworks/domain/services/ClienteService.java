@@ -41,13 +41,11 @@ public class ClienteService {
       return entity;
     }
     
-    var clienteDoEmail = verificarSeExisteClienteComEsseEmail(cliente.getEmail());
-    
-    if (clienteDoEmail != null) {
-      if (clienteDoEmail.getId() != entity.getId()) {
+    var clienteFromEmail = repository.findByEmail(cliente.getEmail()).orElse(null);
+  
+    if (clienteFromEmail != null && clienteFromEmail.getId() != entity.getId()) {
         throw new DomainException("esse email já existe, tente outro.");
       }
-    }
 
     return repository.save(entity);
   }
@@ -61,14 +59,6 @@ public class ClienteService {
     }
 
     return false;
-  }
-
-  private Cliente verificarSeExisteClienteComEsseEmail(String email) {
-    var cliente = repository.findByEmail(email);
-    if (cliente.isPresent()) {
-      return cliente.get();
-    }
-    return null;
   }
 
 }
