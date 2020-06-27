@@ -38,6 +38,22 @@ public class OrdemDeServico implements Serializable {
 
   private LocalDateTime dataFinazacao;
 
+  public OrdemDeServico() {}
+
+  public OrdemDeServico(
+    @NotNull Cliente cliente,
+    @NotNull String descricao,
+    @NotNull BigDecimal preco,
+    StatusOrdemServico status,
+    @NotNull LocalDateTime dataAbertura
+  ) {
+    this.cliente = cliente;
+    this.descricao = descricao;
+    this.preco = preco;
+    this.status = status;
+    this.dataAbertura = dataAbertura;
+  }
+
   public Long getId() {
     return id;
   }
