@@ -10,7 +10,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.octowallet.osworks.domain.ValidationGroup;
 
 @Entity
 public class OrdemDeServico implements Serializable {
@@ -20,8 +27,10 @@ public class OrdemDeServico implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
+  @Valid
+  @ConvertGroup(from = Default.class, to = ValidationGroup.ClienteId.class)
   @NotNull
+  @ManyToOne
   private Cliente cliente;
 
   @NotNull
@@ -31,12 +40,14 @@ public class OrdemDeServico implements Serializable {
   private BigDecimal preco;
 
   @Enumerated(EnumType.STRING)
+  @JsonProperty(access = Access.READ_ONLY)
   private StatusOrdemServico status;
 
-  @NotNull
+  @JsonProperty(access = Access.READ_ONLY)
   private LocalDateTime dataAbertura;
 
-  private LocalDateTime dataFinazacao;
+  @JsonProperty(access = Access.READ_ONLY)
+  private LocalDateTime dataFinalizacao;
 
   public OrdemDeServico() {}
 
@@ -102,12 +113,12 @@ public class OrdemDeServico implements Serializable {
     this.dataAbertura = dataAbertura;
   }
 
-  public LocalDateTime getDataFinazacao() {
-    return dataFinazacao;
+  public LocalDateTime getDataFinalizacao() {
+    return dataFinalizacao;
   }
 
-  public void setDataFinazacao(LocalDateTime dataFinazacao) {
-    this.dataFinazacao = dataFinazacao;
+  public void setDataFinalizacao(LocalDateTime dataFinalizacao) {
+    this.dataFinalizacao = dataFinalizacao;
   }
 
   @Override

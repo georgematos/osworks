@@ -4,6 +4,9 @@ import com.octowallet.osworks.domain.model.OrdemDeServico;
 import com.octowallet.osworks.domain.repository.OrdemDeServicoRepository;
 import com.octowallet.osworks.domain.services.OrdemDeServicoService;
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +43,7 @@ public class OrdemDeServicoController {
 
   @PostMapping
   public ResponseEntity<OrdemDeServico> salvarOrdem(
-    @RequestBody OrdemDeServico ordem
+    @Valid @RequestBody OrdemDeServico ordem
   ) throws NotFoundException {
     var savedEntity = service.criar(ordem);
 
