@@ -1,7 +1,12 @@
 package com.octowallet.osworks.config;
 
 import com.octowallet.osworks.domain.model.Cliente;
+import com.octowallet.osworks.domain.model.OrdemDeServico;
+import com.octowallet.osworks.domain.model.StatusOrdemServico;
 import com.octowallet.osworks.domain.repository.ClienteRepository;
+import com.octowallet.osworks.domain.services.OrdemDeServicoService;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -12,10 +17,15 @@ import org.springframework.context.annotation.Profile;
 @Profile("dev")
 public class TestConfig implements CommandLineRunner {
   private ClienteRepository clienteRepository;
+  private OrdemDeServicoService ordemServicoService;
 
   @Autowired
-  public TestConfig(ClienteRepository clienteRepository) {
+  public TestConfig(
+    ClienteRepository clienteRepository,
+    OrdemDeServicoService ordemService
+  ) {
     this.clienteRepository = clienteRepository;
+    this.ordemServicoService = ordemService;
   }
 
   @Override
@@ -44,5 +54,15 @@ public class TestConfig implements CommandLineRunner {
     clienteRepository.saveAll(
       Arrays.asList(cliente1, cliente2, cliente3, cliente4)
     );
+
+    var ordemServico1 = new OrdemDeServico(
+      cliente1,
+      "Correção de bug",
+      BigDecimal.valueOf(1600.90),
+      StatusOrdemServico.ABERTA,
+      LocalDateTime.now()
+    );
+
+    ordemServicoService.criar(ordemServico1);
   }
 }
