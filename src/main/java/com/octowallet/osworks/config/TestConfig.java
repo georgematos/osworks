@@ -7,6 +7,7 @@ import com.octowallet.osworks.domain.repository.ClienteRepository;
 import com.octowallet.osworks.domain.services.OrdemDeServicoService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -60,7 +61,7 @@ public class TestConfig implements CommandLineRunner {
       "Correção de bug",
       BigDecimal.valueOf(1600.90),
       StatusOrdemServico.ABERTA,
-      LocalDateTime.now()
+      OffsetDateTime.now()
     );
 
     ordemServicoService.criar(ordemServico1);

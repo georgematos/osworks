@@ -1,6 +1,7 @@
 package com.octowallet.osworks.domain.services;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import com.octowallet.osworks.api.exceptionhandler.customexceptions.DomainException;
 import com.octowallet.osworks.domain.model.OrdemDeServico;
@@ -25,7 +26,7 @@ public class OrdemDeServicoService {
     public OrdemDeServico criar(OrdemDeServico ordem) throws NotFoundException {
 
         ordem.setStatus(StatusOrdemServico.ABERTA);
-        ordem.setDataAbertura(LocalDateTime.now());
+        ordem.setDataAbertura(OffsetDateTime.now());
         var cliente = cliRepository.findById(ordem.getCliente().getId()).orElseThrow(() -> new DomainException("Cliente não encontrado."));
         ordem.setCliente(cliente);
 

@@ -38,7 +38,7 @@ public class OrdemDeServicoController {
     return repository
       .findById(id)
       .map(record -> ResponseEntity.ok().body(record))
-      .orElse(ResponseEntity.badRequest().build());
+      .orElse(ResponseEntity.notFound().build());
   }
 
   @PostMapping
