@@ -1,12 +1,16 @@
 package com.octowallet.osworks.api.controller;
 
-import com.octowallet.osworks.domain.model.OrdemDeServico;
-import com.octowallet.osworks.domain.repository.OrdemDeServicoRepository;
-import com.octowallet.osworks.domain.services.OrdemDeServicoService;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import com.octowallet.osworks.domain.dto.OrdemDeServicoDTO;
+import com.octowallet.osworks.domain.model.OrdemDeServico;
+import com.octowallet.osworks.domain.repository.OrdemDeServicoRepository;
+import com.octowallet.osworks.domain.services.OrdemDeServicoService;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +32,19 @@ public class OrdemDeServicoController {
   @Autowired
   private OrdemDeServicoService service;
 
+  @Autowired
+  private ModelMapper modelMapper;
+
   @GetMapping
-  public ResponseEntity<List<OrdemDeServico>> listar() {
-    return ResponseEntity.ok().body(repository.findAll());
+  public ResponseEntity<List<OrdemDeServicoDTO>> listar() {
+    
+    List<OrdemDeServicoDTO> ordens = new ArrayList<>();
+    
+    repository.findAll().stream().forEach(ordem -> {
+      ordens.add(modelMapper.map(ordem, OrdemDeServicoDTO.class));
+    });
+    
+    return ResponseEntity.ok().body(ordens);
   }
 
   @GetMapping(value = "/{id}")
