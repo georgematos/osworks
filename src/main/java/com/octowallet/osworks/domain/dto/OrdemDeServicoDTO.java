@@ -21,11 +21,11 @@ public class OrdemDeServicoDTO {
     this.id = id;
   }
 
-  public String getcliente() {
+  public String getCliente() {
     return cliente;
   }
 
-  public void setcliente(String cliente) {
+  public void setCliente(String cliente) {
     this.cliente = cliente;
   }
 

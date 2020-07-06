@@ -1,14 +1,15 @@
 package com.octowallet.osworks.config;
 
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.util.Arrays;
+
 import com.octowallet.osworks.domain.model.Cliente;
 import com.octowallet.osworks.domain.model.OrdemDeServico;
 import com.octowallet.osworks.domain.model.StatusOrdemServico;
 import com.octowallet.osworks.domain.repository.ClienteRepository;
 import com.octowallet.osworks.domain.services.OrdemDeServicoService;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;

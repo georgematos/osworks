@@ -48,10 +48,10 @@ public class OrdemDeServicoController {
   }
 
   @GetMapping(value = "/{id}")
-  public ResponseEntity<OrdemDeServico> obterPorId(@PathVariable Long id) {
+  public ResponseEntity<OrdemDeServicoDTO> obterPorId(@PathVariable Long id) {
     return repository
       .findById(id)
-      .map(record -> ResponseEntity.ok().body(record))
+      .map(record -> ResponseEntity.ok().body(modelMapper.map(record, OrdemDeServicoDTO.class)))
       .orElse(ResponseEntity.notFound().build());
   }
 
