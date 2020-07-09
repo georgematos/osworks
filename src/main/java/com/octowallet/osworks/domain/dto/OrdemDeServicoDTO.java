@@ -6,7 +6,7 @@ import java.time.OffsetDateTime;
 
 public class OrdemDeServicoDTO {
   private Long id;
-  private String nomeCliente;
+  private ClienteDTO cliente;
   private String descricao;
   private BigDecimal preco;
   private StatusOrdemServico status;
@@ -19,14 +19,6 @@ public class OrdemDeServicoDTO {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public String getNomeCliente() {
-    return nomeCliente;
-  }
-
-  public void setNomeCliente(String cliente) {
-    this.nomeCliente = cliente;
   }
 
   public String getDescricao() {
@@ -68,4 +60,12 @@ public class OrdemDeServicoDTO {
   public void setDataFinalizacao(OffsetDateTime dataFinalizacao) {
     this.dataFinalizacao = dataFinalizacao;
   }
+
+public ClienteDTO getCliente() {
+	return cliente;
+}
+
+public void setCliente(ClienteDTO cliente) {
+	this.cliente = cliente;
+}
 }
