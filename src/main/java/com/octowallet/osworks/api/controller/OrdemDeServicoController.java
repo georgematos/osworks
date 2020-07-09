@@ -41,7 +41,7 @@ public class OrdemDeServicoController {
     List<OrdemDeServicoDTO> ordens = new ArrayList<>();
     
     repository.findAll().stream().forEach(ordem -> {
-      ordens.add(modelMapper.map(ordem, OrdemDeServicoDTO.class));
+      ordens.add(toDTO(ordem));
     });
     
     return ResponseEntity.ok().body(ordens);
@@ -51,7 +51,7 @@ public class OrdemDeServicoController {
   public ResponseEntity<OrdemDeServicoDTO> obterPorId(@PathVariable Long id) {
     return repository
       .findById(id)
-      .map(record -> ResponseEntity.ok().body(modelMapper.map(record, OrdemDeServicoDTO.class)))
+      .map(record -> ResponseEntity.ok().body(toDTO(record)))
       .orElse(ResponseEntity.notFound().build());
   }
 
@@ -68,5 +68,9 @@ public class OrdemDeServicoController {
       .toUri();
 
     return ResponseEntity.created(uri).body(savedEntity);
+  }
+
+  private OrdemDeServicoDTO toDTO(OrdemDeServico ordemDeServico) {
+    return modelMapper.map(ordemDeServico, OrdemDeServicoDTO.class);
   }
 }
