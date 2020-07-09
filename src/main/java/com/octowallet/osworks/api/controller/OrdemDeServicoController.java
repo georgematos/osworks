@@ -1,7 +1,10 @@
 package com.octowallet.osworks.api.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -38,12 +41,11 @@ public class OrdemDeServicoController {
   @GetMapping
   public ResponseEntity<List<OrdemDeServicoDTO>> listar() {
     
-    List<OrdemDeServicoDTO> ordens = new ArrayList<>();
-    
-    repository.findAll().stream().forEach(ordem -> {
-      ordens.add(toDTO(ordem));
-    });
-    
+    List<OrdemDeServicoDTO> ordens = repository.findAll()
+      .stream()
+      .map(ordem -> toDTO(ordem))
+      .collect(Collectors.toList());
+
     return ResponseEntity.ok().body(ordens);
   }
 
