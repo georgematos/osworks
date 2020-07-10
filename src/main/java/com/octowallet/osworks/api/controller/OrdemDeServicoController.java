@@ -1,15 +1,13 @@
 package com.octowallet.osworks.api.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import com.octowallet.osworks.domain.dto.OrdemDeServicoDTO;
 import com.octowallet.osworks.domain.model.OrdemDeServico;
+import com.octowallet.osworks.domain.model.OrdemDeServicoModelInput;
 import com.octowallet.osworks.domain.repository.OrdemDeServicoRepository;
 import com.octowallet.osworks.domain.services.OrdemDeServicoService;
 
@@ -40,8 +38,8 @@ public class OrdemDeServicoController {
 
   @GetMapping
   public ResponseEntity<List<OrdemDeServicoDTO>> listar() {
-    
-    List<OrdemDeServicoDTO> ordens = repository.findAll()
+    List<OrdemDeServicoDTO> ordens = repository
+      .findAll()
       .stream()
       .map(ordem -> toDTO(ordem))
       .collect(Collectors.toList());
@@ -58,9 +56,12 @@ public class OrdemDeServicoController {
   }
 
   @PostMapping
-  public ResponseEntity<OrdemDeServico> salvarOrdem(
-    @Valid @RequestBody OrdemDeServico ordem
-  ) throws NotFoundException {
+  public ResponseEntity<OrdemDeServicoModelInput> salvarOrdem(
+    @Valid 
+    @RequestBody
+    OrdemDeServico ordem
+  )
+    throws NotFoundException {
     var savedEntity = service.criar(ordem);
 
     var uri = ServletUriComponentsBuilder
@@ -69,10 +70,14 @@ public class OrdemDeServicoController {
       .build()
       .toUri();
 
-    return ResponseEntity.created(uri).body(savedEntity);
+    return ResponseEntity.created(uri).body(toModelInput(savedEntity));
   }
 
   private OrdemDeServicoDTO toDTO(OrdemDeServico ordemDeServico) {
     return modelMapper.map(ordemDeServico, OrdemDeServicoDTO.class);
+  }
+
+  private OrdemDeServicoModelInput toModelInput(OrdemDeServico ordemDeServico) {
+    return modelMapper.map(ordemDeServico, OrdemDeServicoModelInput.class);
   }
 }
